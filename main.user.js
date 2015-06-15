@@ -1,7 +1,7 @@
 // ==UserScript== 
 // @name Monster Minigame AutoScript
 // @author /u/mouseasw for creating and maintaining the script, /u/WinneonSword for the Greasemonkey support, and every contributor on the GitHub repo for constant enhancements.
-// @version 2.3.4
+// @version 2.3.5
 // @namespace https://github.com/mtweten/steamSummerMinigame
 // @description A script that runs the Steam Monster Minigame for you.
 // @match *://steamcommunity.com/minigame/towerattack*
@@ -93,7 +93,7 @@ function firstRun() {
 	}
 
 	// disable particle effects - this drastically reduces the game's memory leak
-	/*if (g_Minigame !== undefined) {
+	if (g_Minigame !== undefined) {
 		g_Minigame.CurrentScene().DoClickEffect = function() {};
 		g_Minigame.CurrentScene().DoCritEffect = function( nDamage, x, y, additionalText ) {};
 		g_Minigame.CurrentScene().SpawnEmitter = function(emitter) {
@@ -107,7 +107,7 @@ function firstRun() {
 		CEnemy.prototype.TakeDamage = function() {};
 		CEnemySpawner.prototype.TakeDamage = function() {};
 		CEnemyBoss.prototype.TakeDamage = function() {};
-	}*/
+	}
 }
 
 function doTheThing() {
@@ -346,7 +346,7 @@ function goToLaneWithBestTarget() {
 
 function purchaseUpgrades() {
 	var oddsOfElement = 1 - (0.75*0.75*0.75); //This values elemental too much because best element lanes are not focused(0.578)
-	var avgClicksPerSecond = 3;	//Set this yourself to serve your needs
+	var avgClicksPerSecond = 20;	//Set this yourself to serve your needs
 	
 	var upgrades = g_Minigame.CurrentScene().m_rgTuningData.upgrades.slice(0);
 	var playerUpgrades = g_Minigame.CurrentScene().m_rgPlayerUpgrades;
