@@ -1,14 +1,14 @@
 // ==UserScript== 
 // @name Monster Minigame AutoScript
 // @author /u/mouseasw for creating and maintaining the script, /u/WinneonSword for the Greasemonkey support, and every contributor on the GitHub repo for constant enhancements.
-// @version 2.3.3
-// @namespace https://github.com/mouseas/steamSummerMinigame
+// @version 2.3.4
+// @namespace https://github.com/mtweten/steamSummerMinigame
 // @description A script that runs the Steam Monster Minigame for you.
 // @match *://steamcommunity.com/minigame/towerattack*
 // @match *://steamcommunity.com//minigame/towerattack*
 // @grant none
-// @updateURL https://raw.githubusercontent.com/mouseas/steamSummerMinigame/master/main.user.js
-// @downloadURL https://raw.githubusercontent.com/mouseas/steamSummerMinigame/master/main.user.js
+// @updateURL https://raw.githubusercontent.com/mtweten/steamSummerMinigame/master/main.user.js
+// @downloadURL https://raw.githubusercontent.com/mtweten/steamSummerMinigame/master/main.user.js
 // ==/UserScript==
 
 ///////////////////////////////////////////////////////////
@@ -26,9 +26,9 @@
 ///////////////////////////////////////////////////////////
 
 var isAlreadyRunning = false;
-var autoClickGoldRain = true;
+var autoClickGoldRain = false;
 
-var clickRate = 10; // change to number of desired clicks per second
+var clickRate = 20; // change to number of desired clicks per second
 var timer = 0;
 var lastAction = 500; //start with the max. Array length
 var clickTimer;
@@ -93,7 +93,7 @@ function firstRun() {
 	}
 
 	// disable particle effects - this drastically reduces the game's memory leak
-	if (g_Minigame !== undefined) {
+	/*if (g_Minigame !== undefined) {
 		g_Minigame.CurrentScene().DoClickEffect = function() {};
 		g_Minigame.CurrentScene().DoCritEffect = function( nDamage, x, y, additionalText ) {};
 		g_Minigame.CurrentScene().SpawnEmitter = function(emitter) {
@@ -107,7 +107,7 @@ function firstRun() {
 		CEnemy.prototype.TakeDamage = function() {};
 		CEnemySpawner.prototype.TakeDamage = function() {};
 		CEnemyBoss.prototype.TakeDamage = function() {};
-	}
+	}*/
 }
 
 function doTheThing() {
@@ -857,3 +857,26 @@ var thingTimer = window.setInterval(function(){
 		thingTimer = window.setInterval(doTheThing, 1000);
 	}
 }, 1000);
+
+function clickTheThing() {
+    g_Minigame.m_CurrentScene.DoClick(
+        {
+            data: {
+                getLocalPosition: function() {
+                    var enemy = g_Minigame.m_CurrentScene.GetEnemy(
+                                      g_Minigame.m_CurrentScene.m_rgPlayerData.current_lane,
+                                      g_Minigame.m_CurrentScene.m_rgPlayerData.target),
+                        laneOffset = enemy.m_nLane * 440;
+
+                    return {
+                        x: enemy.m_Sprite.position.x - laneOffset,
+                        y: enemy.m_Sprite.position.y - 52
+                    }
+                }
+            }
+        }
+    );
+}
+
+var clickTimer = window.setInterval(clickTheThing, 1000/clickRate);
+
